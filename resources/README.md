@@ -7,10 +7,12 @@ Folder structure:
 - BGM - user audio files
 - data - any extracted data files e.g. `clientinfo.xml`
 - System - user System files
-- SystemEN
 - data.ini
 - README.md *(this file)*
 - *.grf - compressed data files
+
+> [!NOTE]
+> - You dont need to replace the lua/lub files `dofile` or `require "AI\\Const"` paths. Server will handle the change and set `Cache-control` for caching.
 
 ## DATA.ini
 ```text

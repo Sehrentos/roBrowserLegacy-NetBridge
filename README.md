@@ -124,7 +124,7 @@ Put your certificates in the `/certs` directory and configure `USE_SSL`, `SSL_KE
 
 # 4.4 Client resources
 
-Put `GRF`, `BGM`, `AI`, `System` and `SystemEN` files in the `/resources` directory.
+Put `GRF`, `BGM`, `AI`, `System` files in the `/resources` directory.
 
 - If you have uncompressed data resources, put them in `/data` subdirectory.
 - See resources [README](./resources/README.md) for more info.

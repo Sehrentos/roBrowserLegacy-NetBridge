@@ -6,10 +6,12 @@ import { send404 } from '../response/send404.js';
 import { send500 } from '../response/send500.js';
 import { sendFile } from '../utils/sendFile.js';
 import { parseURL } from '../utils/parseURL.js';
+import { parseLuaFile } from '../utils/parseLuaFile.js';
+import { fixCommonTypos } from '../utils/fixCommonTypos.js';
+import { getContentTypeExt } from '../utils/getContentTypeExt.js';
 import { setCache } from '../middleware/setCache.js';
 import { setCORS } from '../middleware/setCORS.js';
 import { loadGRF } from '../modules/loadGRF.js';
-import { getContentTypeExt } from '../utils/getContentTypeExt.js';
 import config from '../../config.js';
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
@@ -79,12 +81,31 @@ export async function onEntryRequest(req, res) {
             // check if the file exists
             try {
                 await access(filepath, constants.F_OK);
+                // check was the file an .lua or .lub file
+                // then replace dofile with require
+                // and fix paths like AI\\Const to AI/Const
+                if (/\.(lua|lub)$/.test(filepath)) {
+                    return sendFile(res, filepath, {
+                        debug: LOGS,
+                        onBeforeSend: (content) => {
+                            return Buffer.from(parseLuaFile(content.toString('utf-8')));
+                        }
+                    });
+                }
+                // non-lua file
                 return sendFile(res, filepath, { debug: LOGS });
             } catch (error) {
                 // initialize GRF reading process
                 try {
                     const grfFileData = await loadGRF(url.pathname);
-                    const buf = Buffer.from(grfFileData);
+                    /** @type {Buffer<ArrayBuffer>|Buffer<Uint8Array<ArrayBufferLike>>} */
+                    let buf = Buffer.from(grfFileData);
+                    // check was the file an .lua or .lub file
+                    // then replace dofile with require
+                    // and fix paths like AI\\Const to AI/Const
+                    if (/\.(lua|lub)$/.test(filepath)) {
+                        buf = Buffer.from(parseLuaFile(buf.toString('utf-8')));
+                    }
                     if (LOGS) console.log(`${process.pid} GRF`, url.pathname, buf.byteLength);
                     res.writeHead(200, {
                         'Content-Length': buf.byteLength, //Buffer.byteLength("my string content"),
@@ -131,13 +152,4 @@ export async function onEntryRequest(req, res) {
         console.error(`${process.pid} RequestError:`, error);
         send500(res);
     }
-}
-
-/**
- * Helper to fix common typos posted from the client
- * @param {string} value 
- */
-function fixCommonTypos(value) {
-    return value.replace('.lua.lua', '.lua') // "AI/AI.lua.lua"
-        .replace('//', '/') // "//AI/AI.lua"
 }

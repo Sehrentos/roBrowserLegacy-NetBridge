@@ -11,6 +11,7 @@ import { send500 } from "../response/send500.js";
  * @param {Object} [options]
  * @param {boolean} [options.debug] use `true` for debug logs. default: `false`
  * @param {number} [options.cache] Set Cache-control. default: `43200` (12 hours). use `0` for no caching
+ * @param {(content:Buffer) => Buffer<ArrayBufferLike>} [options.onBeforeSend] callback before send file, if you need to access the file content before it's sent
  */
 export function sendFile(response, filepath, options) {
     const _options = Object.assign({
@@ -28,6 +29,10 @@ export function sendFile(response, filepath, options) {
                 return send404(response);
             }
             return send500(response);
+        }
+        // callback before send file
+        if (_options.onBeforeSend) {
+            content = _options.onBeforeSend(content);
         }
         // Ok, 200 response
         if (_options.debug) console.log(`200 ${process.pid} ${filepath}`)
