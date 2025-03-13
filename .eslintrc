@@ -1,0 +1,63 @@
+{
+	"env": {
+		"browser": false,
+		"node": true,
+		"es6": true
+	},
+	"parserOptions": {
+		"ecmaVersion": "latest",
+		"sourceType": "module",
+		"impliedStrict": true
+	},
+	"rules": {
+		"eqeqeq": "off",
+		"curly": "off",
+		"quotes": "off",
+		"camelcase": "off",
+		"array-callback-return": "warn",
+		"constructor-super": "warn",
+		"default-case": "warn",
+		"default-param-last": "off",
+		"max-depth": [
+			"warn",
+			5
+		],
+		"max-nested-callbacks": [
+			"warn",
+			4
+		],
+		"no-alert": "warn",
+		"no-else-return": "warn",
+		"no-empty": "warn",
+		"no-empty-function": "warn",
+		"no-eval": "warn",
+		"no-invalid-this": "warn",
+		"no-inner-declarations": "warn",
+		"no-irregular-whitespace": "warn",
+		"no-lone-blocks": "warn",
+		"no-loop-func": "off",
+		"no-var": "warn",
+		"no-with": "error",
+		"no-shadow": "warn",
+		"spaced-comment": "off",
+		"vars-on-top": "off",
+		"yoda": "warn"
+	},
+	"overrides": [
+		{
+			"env": {
+				"browser": true,
+				"node": false,
+				"es6": true
+			},
+			"files": [
+				"*/public/**/*.js"
+			],
+			"parserOptions": {
+				"ecmaVersion": "latest",
+				"sourceType": "module"
+			}
+		}
+	],
+	"reportUnusedDisableDirectives": true
+}

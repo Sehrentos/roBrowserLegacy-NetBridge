@@ -1,0 +1,19 @@
+{
+	"icons": [
+		{
+			"src": "./favicon.svg",
+			"sizes": "48x48 72x72 96x96 128x128 256x256 384x384 512x512",
+			"type": "image/svg+xml",
+			"purpose": "any"
+		}
+	],
+	"name": "roBrowser",
+	"short_name": "roBrowser",
+	"orientation": "portrait",
+	"display": "standalone",
+	"start_url": "./index.html",
+	"fallback": "./offline.html",
+	"description": "roBrowser application",
+	"theme_color": "#b22222",
+	"background_color": "#b22222"
+}
