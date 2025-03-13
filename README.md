@@ -21,6 +21,10 @@ These are needed before you begin.
 | Game Server     | Your Emulator that usually is [rAthena](https://github.com/rathena/rathena) or [Hercules](https://github.com/HerculesWS/Hercules/) |
 | Game Files      | Game files to use as your base for the server                                                                                      |
 
+> [!WARNING]
+> - Disable `packet_obfuscation` on the game server. (Not supported)
+> - Packet version must match the game server `#define PACKETVER 20131223`. You can change the `packetver` what suits your needs.
+
 # 2. Quick install
 
 Install this project using npm command.
@@ -77,7 +81,7 @@ You can also make your own. It basically only needs to have the `window.ROConfig
 - servers:
   - address = e.g. `"127.0.0.1"`
   - port = e.g. `6900`
-  - packerver = e.g. `20131223`
+  - packetver = e.g. `20131223`
   - socketProxy = e.g. `"ws://127.0.0.1/"`
 
 # 4.2 Config server
