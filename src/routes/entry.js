@@ -123,15 +123,16 @@ export async function onEntryRequest(req, res) {
             }
         }
 
-        // static /src * files for DEBUGGING client source code?
-        // if (/src\/(.*)/.test(url.pathname)) {
-        //     const filepath = parseURL(req, path.join(DIR_ROBROWSER, '/src'))
-        //         .replace('src\\src\\', 'src\\')
-        //         .replace('src/src/', 'src/')
-        //     sendFile(res, filepath, { debug: LOGS, cache: 0 });
-        //     // streamFile(response, filepath);
-        //     return;
-        // }
+        // static /src * files for the roBrowserLegacy like UI/Components images etc.
+        // ROConfig.skipIntro=false requires these routes
+        if (/src\/(.*)/.test(url.pathname)) {
+            const filepath = parseURL(req, path.join(DIR_ROBROWSER, '/src'))
+                .replace('src\\src\\', 'src\\')
+                .replace('src/src/', 'src/')
+            sendFile(res, filepath, { debug: LOGS, cache: 0 });
+            // streamFile(response, filepath);
+            return;
+        }
 
         // fallback to public directory
         if (req.method === 'GET') {
