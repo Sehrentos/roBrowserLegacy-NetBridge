@@ -10,17 +10,50 @@ It also has some default caching and uses wsproxy to bridge data from WebSocket 
 - GRF version 0x200 is supported. No DES encryption.
 - Resources get cache-control set for 12-hours (optional).
 
-## Install
+# 1. Prerequisites
+
+These are needed before you begin.
+
+| Item            | Description                                                                                                                        |
+| --------------- | ---------------------------------------------------------------------------------------------------------------------------------- |
+| NodeJS 20+      | [NodeJS](https://nodejs.org/en/download) to compile RoBrowser assets and run asset & websocket server                              |
+| RoBrowserLegacy | [roBrowserLegacy](https://github.com/MrAntares/roBrowserLegacy) RoBrowser project                                                  |
+| Game Server     | Your Emulator that usually is [rAthena](https://github.com/rathena/rathena) or [Hercules](https://github.com/HerculesWS/Hercules/) |
+| Game Files      | Game files to use as your base for the server                                                                                      |
+
+# 2. Quick install
+
+Install this project using npm command.
 ```sh
 npm install
 ```
 
-## Start the server
+# 2.1 Start the server
+
+Start this server using npm command or (windows) [start-server.bat](./server-start.bat) file.
 ```sh
 npm run start
 ```
 
-## Configure
+# 3. Full install
+
+Install roBrowserLegacy and roBrowserLegacy-NetBridge projects. Uses default configurations on both projects.
+- clone git repo roBrowserLegacy
+- clone git repo roBrowserLegacy-NetBridge
+- See [Configure](#4-configure) after install is completed.
+
+```sh
+cd .\roBrowserLegacy\
+npm install
+npm run build
+cd ..
+cd .\roBrowserLegacy-NetBridge\
+npm install
+npm run start
+explorer "http://127.0.0.1/"
+```
+
+# 4. Configure
 
 Current project structure is something like this:
 - /projects
@@ -29,7 +62,7 @@ Current project structure is something like this:
   - /rathena
   - /Hercules
 
-### Config client
+# 4.1 Config client
 
 Configure the server address and port in the roBrowserLegacy project. Here are some examples:
 
@@ -47,7 +80,7 @@ You can also make your own. It basically only needs to have the `window.ROConfig
   - packerver = e.g. `20131223`
   - socketProxy = e.g. `"ws://127.0.0.1/"`
 
-### Config server
+# 4.2 Config server
 
 Configure the server options in the [.env](./.env) file. **Note: create one, if it does not exists.**
 
@@ -74,27 +107,33 @@ SSL_KEY=./certs/localhost.key
 SSL_CERT=./certs/localhost.crt
 ```
 
-### SSL Certificate
-For secure HTTPS put your certificates in the `/certs` directory and configure `SSL_KEY, SSL_CERT` in the `.env` file. 
+# 4.3 SSL Certificate
+
+HTTPS is only necessary for public deployment. For local development without HTTPS, it is not required.
+
+HTTPS is required for the public server to enable secure WebSocket connections. Browsers block non-secure WebSocket communication.
+
+Put your certificates in the `/certs` directory and configure `USE_SSL`, `SSL_KEY` and `SSL_CERT` in the `.env` file. 
 
 - See certs [README](./certs/README.md) for more info.
 - WebSocket requires secure connection.
 
-### Client resources
-Put GRF, BGM audio, AI lua/lub, System lua/lub files in the `/resources` directory.
+# 4.4 Client resources
+
+Put `GRF`, `BGM`, `AI`, `System` and `SystemEN` files in the `/resources` directory.
 
 - If you have uncompressed data resources, put them in `/data` subdirectory.
 - See resources [README](./resources/README.md) for more info.
 
-## Modules
-- [grf-loader](https://github.com/vthibault/grf-loader/)
-- [websockets/ws](https://github.com/websockets/ws)
+# 5. Dependencies
+- [vthibault/grf-loader](https://github.com/vthibault/grf-loader/) for extracting data from compressed resource files.
+- [websockets/ws](https://github.com/websockets/ws) for WebSocket communication.
 
-## Credits
+# 6. Credits
 - [roBrowser](https://github.com/vthibault/roBrowser) [Vincent Thibault](https://github.com/vthibault) & all the contributors.
 - [roBrowserLegacy](https://github.com/MrAntares/roBrowserLegacy) & all the contributors.
 - The [WSProxy class](./src/modules/WSProxy.js) is based on [herenow](https://github.com/herenow)'s [wsProxy](https://github.com/herenow/wsProxy)
 
-## To-Do
-- Change possibly express, restana or fastify for server implementation. Depends how complex the requests will become. 
-As for now they are very simple, so i decided not to use any library for now.
+# 7. To-Do
+
+For future scalability and complexity, consider migrating the server implementation to Express.js, Restana, or Fastify. While the current requests are simple and don't necessitate a framework, these options offer enhanced features and performance for more demanding workloads.
