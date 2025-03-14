@@ -7,7 +7,7 @@ import { openSync, readFileSync } from 'fs';
  * @returns {Promise<Uint8Array>} the content of the file as a Uint8Array.
  */
 export async function loadGRF(searchFilename) {
-    const name = decodeURIComponent(searchFilename.slice(1).replace(/\//g, '\\'));
+    const name = searchFilename.slice(1).replace(/\//g, '\\');
     const grfFiles = parseDataIni();
     for (const grfFile of grfFiles) {
         try {

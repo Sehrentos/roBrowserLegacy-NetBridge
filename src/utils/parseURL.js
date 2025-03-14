@@ -1,6 +1,6 @@
 import path from 'path';
 /**
- * Helper to parse the request.url & header referer
+ * Helper to parse the request.url, header referer and normalize
  * 
  * @param {import("http").IncomingMessage} request 
  * @param {string=} staticDir optional
@@ -27,5 +27,5 @@ export function parseURL(request, staticDir = "") {
     if (!hasExtension) {
         filepath = path.join(filepath, '/index.html');
     }
-    return filepath;
+    return path.normalize(filepath);
 }

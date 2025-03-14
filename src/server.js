@@ -6,7 +6,7 @@ import http from 'http';
 import https from 'https';
 import { WebSocketServer } from 'ws'; // version 8.18.0
 import { WSProxy } from './modules/WSProxy.js';
-import { onEntryRequest } from './routes/entry.js';
+import { onEntryRequest } from './routes/onEntryRequest.js';
 import config from '../config.js';
 
 // paths
