@@ -1,4 +1,14 @@
+certs/*
+!certs/README.md
 /node_modules
+resources/*
+!resources/README.md
+!resources/AI/README.md
+!resources/AI/USER_AI/README.md
+!resources/BGM/README.md
+!resources/data/README.md
+!resources/System/README.md
+!resources/SystemEN/README.md
 /test
 /tests
 /backup

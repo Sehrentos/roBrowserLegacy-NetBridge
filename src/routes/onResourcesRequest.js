@@ -21,16 +21,10 @@ const DIR_ROOT = path.resolve(__dirname, '../../');
  * @param {import("http").ServerResponse} res
  */
 export async function onResourcesRequest(req, res) {
-    let filepath = parseURL(req, path.join(DIR_ROOT, '/resources'));
+    let filepath = decodeURI(parseURL(req, path.join(DIR_ROOT, '/resources')));
     const url = new URL(req.url || "/", `${config.useSSL ? 'https' : 'http'}://${req.headers.host || config.host}${req.url}`);
 
     setCORS(req, res); // required for localhost
-
-    // decode the filename, they may contain special characters
-    const dataPath = filepath.match(/data\\(imf|lua%20files|luafiles514|model|palette|sprite|texture|wav)\\(.*)/);
-    if (dataPath != null) {
-        filepath = filepath.replace(dataPath[2], decodeURIComponent(dataPath[2]));
-    }
 
     // check if the file exists
     try {
@@ -55,7 +49,7 @@ export async function onResourcesRequest(req, res) {
     } catch (error) {
         // initialize GRF reading process
         try {
-            const decodedUrlPathname = decodeURIComponent(url.pathname);
+            const decodedUrlPathname = decodeURI(url.pathname);
             const grfFileData = await loadGRF(decodedUrlPathname);
             /** @type {Buffer<ArrayBuffer>|Buffer<Uint8Array<ArrayBufferLike>>} */
             let buf = Buffer.from(grfFileData);
@@ -74,7 +68,7 @@ export async function onResourcesRequest(req, res) {
         } catch (grfError) {
             const msg1 = error.code || error.message || error;
             const msg2 = grfError.code || grfError.message || grfError;
-            console.error(`404 ${process.pid} GRF error ${decodeURIComponent(url.pathname)}:`, msg1, msg2);
+            console.error(`404 ${process.pid} GRF error ${decodeURI(url.pathname)}:`, msg1, msg2);
             send404(res);
         }
     }

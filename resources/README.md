@@ -17,7 +17,6 @@ Folder structure:
 ## DATA.ini
 ```text
 [Data]
-1=adata.grf
-2=bdata.grf
-3=cdata.grf
+1=rdata.grf
+2=data.grf
 ```
