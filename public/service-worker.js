@@ -18,14 +18,28 @@ const CACHE_FILES = [
 	//#region public
 	'/', //=index.html
 	'/favicon.svg',
+	'/index.js',
 	'/styles.css',
 	'/manifest.json',
 	'/offline.html',
 	'/service-worker.js',
 	//#endregion
 	//#region roBrowser
-	// '/Online.js',
-	// '/ThreadEventHandler.js',
+	'/Online.js',
+	'/ThreadEventHandler.js',
+	'/wasmoon-lua5.1@1.18.10/dist/liblua5.1.wasm', // CDN https://unpkg.com
+	'/src/UI/Components/Intro/images/about.png',
+	'/src/UI/Components/Intro/images/icon.png',
+	'/src/UI/Components/Intro/images/settings.png',
+	'/src/UI/Components/Intro/images/background.jpg',
+	'/src/UI/Components/Intro/images/ribbon.png',
+	'/src/UI/Components/Intro/images/box.jpg',
+	'/src/UI/Components/Intro/images/play.png',
+	'/src/UI/Components/Intro/images/play-down.png',
+	// these should be cached by the browser already with Cache-control
+	// '/data/texture/%C3%80%C2%AF%C3%80%C3%BA%C3%80%C3%8E%C3%85%C3%8D%C3%86%C3%A4%C3%80%C3%8C%C2%BD%C2%BA/scroll0bar_mid.bmp',
+	// '/data/texture/%C3%80%C2%AF%C3%80%C3%BA%C3%80%C3%8E%C3%85%C3%8D%C3%86%C3%A4%C3%80%C3%8C%C2%BD%C2%BA/scroll0bar_up.bmp',
+	// '/data/texture/%C3%80%C2%AF%C3%80%C3%BA%C3%80%C3%8E%C3%85%C3%8D%C3%86%C3%A4%C3%80%C3%8C%C2%BD%C2%BA/scroll0bar_down.bmp',
 	//#endregion
 ];
 
@@ -53,7 +67,7 @@ _self.addEventListener('install', (/** @type {InstallEvent} */event) => {
 			})))
 			.then(() => caches.open(CURRENT_CACHE).then((cache) => { // add new cache
 				console.log(`${TAG} add cache: ${CURRENT_CACHE}`, CACHE_FILES)
-				return cache.addAll(CACHE_FILES)
+				return cache.addAll(CACHE_FILES).catch((err) => console.warn("cache.addAll failed.", err))
 			}))
 			.then(() => {
 				// forces the waiting service worker to become the active service worker, also triggering "activate" event.
@@ -74,7 +88,6 @@ _self.addEventListener('activate', (/** @type {ActivateEvent} */event) => {
 // Fetch in network first priority and then cache.
 _self.addEventListener('fetch', (/** @type {FetchEvent} */event) => {
 	const url = new URL(event.request.url)
-	// console.log(`${TAG} ${event.type}:`, url.pathname, event)
 	// pre-cached source files use cache first priority
 	if (CACHE_FILES.includes(url.pathname)) {
 		event.respondWith(cacheFirst(event.request))
@@ -91,10 +104,10 @@ _self.addEventListener('fetch', (/** @type {FetchEvent} */event) => {
 async function cacheFirst(request) {
 	const cachedResponse = await caches.open(CURRENT_CACHE).then((cache) => cache.match(request));
 	if (cachedResponse) {
-		console.log("Found response in cache:", cachedResponse);
+		console.log("cache:", cachedResponse.status, cachedResponse.url);
 		return cachedResponse;
 	}
-	console.log("Falling back to network");
+	// Falling back to network
 	return fetch(request).then((response) => {
 		// response may be used only once
 		// we need to save clone to put one copy in cache
@@ -113,7 +126,7 @@ async function cacheFirst(request) {
 		});
 
 		// Return the response
-		console.log("Found response in network:", responseClone);
+		console.log("network:", responseClone.status, responseClone.url);
 		return response;
 	}).catch((error) => {
 		// Check if the requested resource is cached.
@@ -157,7 +170,7 @@ async function networkFirst(request) {
 		});
 
 		// Return the response
-		console.log("Found response in network:", responseClone);
+		console.log("network:", responseClone.status, responseClone.url);
 		return response;
 	}).catch((error) => {
 		// Check if the requested resource is cached.
