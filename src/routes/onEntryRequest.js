@@ -40,7 +40,8 @@ export async function onEntryRequest(req, res) {
             try {
                 const filepath = parseURL(req, DIR_PUBLIC);
                 await access(filepath, constants.F_OK);
-                return sendFile(res, filepath, { debug: config.logHttp, cache: 0 });
+                await sendFile(res, filepath, { debug: config.logHttp, cache: 0 });
+                return; // Route handled; asset served.
             } catch (er) {
                 // silent
             }
@@ -51,7 +52,8 @@ export async function onEntryRequest(req, res) {
             try {
                 const filepath = parseURL(req, path.join(DIR_ROBROWSER, "dist/Web"));
                 await access(filepath, constants.F_OK);
-                return sendFile(res, filepath, { debug: config.logHttp, cache: 0 });
+                await sendFile(res, filepath, { debug: config.logHttp, cache: 0 });
+                return; // Route handled; asset served.
             } catch (er) {
                 // silent
             }
