@@ -35,17 +35,23 @@ export async function onResourcesRequest(req, res) {
     // check if the file exists
     try {
         await access(filepath, constants.F_OK);
+
         // check was the file an .lua or .lub file
         if (/\.(lua|lub)$/.test(filepath)) {
-            return sendFile(res, filepath, {
-                debug: config.logHttp,
+            await sendFile(res, filepath, {
                 onBeforeSend: (content) => {
                     return Buffer.from(parseLuaFile(content.toString('utf-8')));
                 }
             });
+            if (config.logHttp) console.log(`200 ${process.pid} ${filepath}`)
+            return; // Route handled; asset served.
         }
+
         // non-lua file
-        sendFile(res, filepath, { debug: config.logHttp });
+        await sendFile(res, filepath);
+        if (config.logHttp) console.log(`200 ${process.pid} ${filepath}`)
+        return; // Route handled; asset served.
+
     } catch (error) {
         // initialize GRF reading process
         try {
@@ -57,19 +63,18 @@ export async function onResourcesRequest(req, res) {
             if (/\.(lua|lub)$/.test(filepath)) {
                 buf = Buffer.from(parseLuaFile(buf.toString('utf-8')));
             }
-
-            if (config.logHttp) console.log(`${process.pid} GRF`, decodedUrlPathname, buf.byteLength);
-
             res.writeHead(200, {
                 'Content-Length': buf.byteLength, //Buffer.byteLength("my string content"),
                 'Content-Type': getContentTypeExt(filepath),
                 'X-Powered-By': 'Magic',
                 'Cache-control': `public, max-age=${60 * 60 * 12}`, // 12 hours cache
             });
-
             res.end(buf, 'utf-8');
+            if (config.logHttp) console.log(`200 ${process.pid} GRF ${decodedUrlPathname}`)
         } catch (grfError) {
-            console.error(`404 ${process.pid} GRF error ${decodeURIComponent(url.pathname)}:`, error.message || error);
+            const msg1 = error.code || error.message || error;
+            const msg2 = grfError.code || grfError.message || grfError;
+            console.error(`404 ${process.pid} GRF error ${decodeURIComponent(url.pathname)}:`, msg1, msg2);
             send404(res);
         }
     }

@@ -40,7 +40,8 @@ export async function onEntryRequest(req, res) {
             try {
                 const filepath = parseURL(req, DIR_PUBLIC);
                 await access(filepath, constants.F_OK);
-                await sendFile(res, filepath, { debug: config.logHttp, cache: 0 });
+                await sendFile(res, filepath, { cache: 0 });
+                if (config.logHttp) console.log(`200 ${process.pid} ${filepath}`)
                 return; // Route handled; asset served.
             } catch (er) {
                 // silent
@@ -52,7 +53,8 @@ export async function onEntryRequest(req, res) {
             try {
                 const filepath = parseURL(req, path.join(DIR_ROBROWSER, "dist/Web"));
                 await access(filepath, constants.F_OK);
-                await sendFile(res, filepath, { debug: config.logHttp, cache: 0 });
+                await sendFile(res, filepath, { cache: 0 });
+                if (config.logHttp) console.log(`200 ${process.pid} ${filepath}`)
                 return; // Route handled; asset served.
             } catch (er) {
                 // silent
