@@ -98,12 +98,15 @@ PORT_SSL=443
 # logging / debugging
 LOG_HTTP=false
 LOG_PROXY=false
+# browser caching (e.g. 60 * 60 * 12 = 43200 is 12-hours and 0 = disabled)
+# Note: enable this after testing
+#CACHE_CONTROL=43200
 # relative path to public assets directory
 DIR_PUBLIC=public/
 # relative path to roBrowserLegacy project
 DIR_ROBROWSER=../roBrowserLegacy
 # use multi-core process with cluster module
-USE_CLUSTER=true
+USE_CLUSTER=false
 # enable SSL/HTTPS
 USE_SSL=false
 # certificates

@@ -11,6 +11,7 @@ export default {
     portHttps: Number(process.env.PORT_SSL) || 443,
     logHttp: process.env.LOG_HTTP === "true", // asset logs
     logProxy: process.env.LOG_PROXY === "true", // proxy logs
+    cacheControl: Number(process.env.CACHE_CONTROL || "0"), // Client Cache-Control max-age value
     dirPublic: process.env.DIR_PUBLIC || "public/", // public/ or ../roBrowserLegacy/dist/Web
     dirROBrowser: process.env.DIR_ROBROWSER || "../roBrowserLegacy",
     /** use multi-core process with cluster module */

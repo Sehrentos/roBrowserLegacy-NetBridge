@@ -33,6 +33,7 @@ export async function onResourcesRequest(req, res) {
         // check was the file an .lua or .lub file
         if (/\.(lua|lub)$/.test(filepath)) {
             await sendFile(res, filepath, {
+                cache: config.cacheControl, // use env cache-control value
                 onBeforeSend: (content) => {
                     return Buffer.from(parseLuaFile(content.toString('utf-8')));
                 }
@@ -42,7 +43,9 @@ export async function onResourcesRequest(req, res) {
         }
 
         // non-lua file
-        await sendFile(res, filepath);
+        await sendFile(res, filepath, {
+            cache: config.cacheControl, // use env cache-control value
+        });
         if (config.logHttp) console.log(`200 ${process.pid} ${filepath}`)
         return; // Route handled; asset served.
 
@@ -57,12 +60,15 @@ export async function onResourcesRequest(req, res) {
             if (/\.(lua|lub)$/.test(filepath)) {
                 buf = Buffer.from(parseLuaFile(buf.toString('utf-8')));
             }
-            res.writeHead(200, {
+            const headers = {
                 'Content-Length': buf.byteLength, //Buffer.byteLength("my string content"),
                 'Content-Type': getContentTypeExt(filepath),
                 'X-Powered-By': 'Magic',
-                'Cache-control': `public, max-age=${60 * 60 * 12}`, // 12 hours cache
-            });
+            }
+            if (config.cacheControl) {
+                headers['Cache-control'] = `public, max-age=${config.cacheControl}` // 12 hours cache
+            }
+            res.writeHead(200, headers);
             res.end(buf, 'utf-8');
             if (config.logHttp) console.log(`200 ${process.pid} GRF ${decodedUrlPathname}`)
         } catch (grfError) {
