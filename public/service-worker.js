@@ -20,7 +20,8 @@ const CURRENT_CACHE = `${CACHE_NAME}${CACHE_VERSION}`;
  */
 const CACHE_FILES = [
 	//#region public
-	'/', //=index.html
+	'/',
+	'/index.html',
 	'/favicon.svg',
 	'/index.js',
 	'/styles.css',
