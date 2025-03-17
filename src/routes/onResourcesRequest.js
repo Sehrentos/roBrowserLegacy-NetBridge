@@ -25,7 +25,6 @@ export async function onResourcesRequest(req, res) {
     const url = new URL(req.url || "/", `${config.useSSL ? 'https' : 'http'}://${req.headers.host || config.host}${req.url}`);
 
     // decode the filename, they may also contain special characters
-    // e.g. "/data/texture/³»ºÎ¼ÒÇ°/gl_bm_magipot%26mbook%26plane.bmp" > "gl_bm_magipot&mbook&plane.bmp"
     const dataPath = filepath.match(/data\\(imf|lua%20files|luafiles514|model|palette|sprite|texture|wav)\\(.*)/);
     if (dataPath != null) {
         filepath = filepath.replace(dataPath[2], decodeURIComponent(dataPath[2]));
