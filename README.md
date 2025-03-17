@@ -87,6 +87,22 @@ You can also make your own. It basically only needs to have the `window.ROConfig
 
 Configure the server options in the [.env](./.env) file. **Note: create one, if it does not exists.**
 
+| Config Name | Default Value | Description |
+| --- | --- | --- |
+| NODE_ENV | development | NodeJS environment mode |
+| HOST | 127.0.0.1 | Server IP address |
+| PORT | 80 | Server Port number |
+| PORT_SSL | 443 | SSL/HTTPS Port number |
+| LOG_HTTP | false | Enable some HTTP logs for debugging |
+| LOG_PROXY | false | Enable some WebSocket proxy logs for debugging  |
+| CACHE_CONTROL | 0 | Default Cache-Control max-age value. `0` is disabled. |
+| DIR_PUBLIC | public/ | Public assets directory path (*from this projects root*) |
+| DIR_ROBROWSER | ../roBrowserLegacy | RoBrowser project directory path (*from this projects root*) |
+| USE_CLUSTER | false | Distributes load across CPU cores (skip for local development) |
+| USE_SSL | false | Enable HTTPS |
+| SSL_KEY | ./certs/localhost.key | Certificates private key file |
+| SSL_CERT | ./certs/localhost.crt | Certificates file |
+
 Here is an example:
 ```env
 # configuration
