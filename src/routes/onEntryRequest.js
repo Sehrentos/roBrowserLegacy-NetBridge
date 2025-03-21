@@ -35,6 +35,19 @@ export async function onEntryRequest(req, res) {
             return onResourcesRequest(req, res);
         }
 
+        // serve roBrowser src directory (for plugins e.g. IntroMessage)
+        if (req.method === 'GET' &&/^\/src\/(.+)$/i.test(url.pathname)) {
+            try {
+                const filepath = parseURL(req, DIR_ROBROWSER);
+                await access(filepath, constants.F_OK);
+                await sendFile(res, filepath, { cache: 0 });
+                if (config.logHttp) console.log(`200 ${process.pid} ${filepath}`)
+                return; // Route handled; asset served.
+            } catch (er) {
+                // silent
+            }
+        }
+
         // serve public directory assets
         if (req.method === 'GET') {
             try {
