@@ -10,6 +10,9 @@ It also has some default caching and uses wsproxy to bridge data from WebSocket 
 - GRF version 0x200 is supported. No DES encryption.
 - Resources get cache-control set for 12-hours (optional).
 
+> [!WARNING]
+> - I am not actively maintaining, since i don't have enough spare time nor intrest, but i keep this repo as an example for future use cases.
+
 # 1. Prerequisites
 
 These are needed before you begin.
