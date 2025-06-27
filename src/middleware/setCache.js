@@ -10,7 +10,7 @@ export function setCache(req, res, period = 60 * 60 * 12) {
 
     // you only want to cache for GET requests x in seconds
     if (req.method == 'GET') {
-        res.setHeader('Cache-control', `public, max-age=${period}`)
+        res.setHeader('Cache-control', `max-age=${period}, immutable`);
     } else {
         // for the other requests set strict no caching parameters
         res.setHeader('Cache-control', `no-store`)

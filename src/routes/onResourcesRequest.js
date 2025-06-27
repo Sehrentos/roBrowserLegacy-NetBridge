@@ -72,7 +72,7 @@ export async function onResourcesRequest(req, res) {
                 'X-Powered-By': 'Magic',
             }
             if (config.cacheControl) {
-                headers['Cache-control'] = `public, max-age=${config.cacheControl}` // 12 hours cache
+                headers['Cache-control'] = config.cacheControl // caching
             }
             res.writeHead(200, headers);
             res.end(buf, 'utf-8');

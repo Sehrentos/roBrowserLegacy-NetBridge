@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <meta name="mobile-web-app-capable" content="yes" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+    <meta name="HandheldFriendly" content="true" />
+    <meta name="theme-color" content="#b22222" />
+    <title>ROBrowser</title>
+    <link rel="icon" href="favicon.svg" sizes="any">
+    <link rel="manifest" href="manifest.json" />
+    <link rel="stylesheet" href="styles.css" />
+    <script type="text/javascript">
+        window.addEventListener("load", (event) => {
+            // See config details
+            // https://github.com/MrAntares/roBrowserLegacy/tree/master/doc#7-robrowser-settings-overview
+            window.ROConfig = {
+                development: false,
+                remoteClient: window.location.protocol + "//127.0.0.1/", // e.g. "https://127.0.0.1/"
+                servers: [
+                    {
+                        display: "Renewal",
+                        desc: "Renewal server",
+                        address: "127.0.0.1",
+                        port: 6901,
+                        version: 46,
+                        langtype: 240, // 1=windows-1252, 240=UTF-8
+                        packetver: 20230302, // RENEWAL
+                        renewal: true, // Game mode PRE-RENEWAL or RENEWAL
+                        socketProxy: `${window.location.protocol == "https:" ? "wss" : "ws"}://127.0.0.1/`,
+                        adminList: [/*2000000*/],
+                        aura: { defaultLv: 99, },
+                        enableCashShop: true, // has issues
+                    },
+                    {
+                        display: "Legacy",
+                        desc: "Legacy server",
+                        address: "127.0.0.1",
+                        port: 6900,
+                        version: 46,
+                        langtype: 240, // 1=windows-1252, 240=UTF-8
+                        packetver: 20131223, // PRE-RENEWAL
+                        renewal: false, // Game mode PRE-RENEWAL or RENEWAL
+                        socketProxy: `${window.location.protocol == "https:" ? "wss" : "ws"}://127.0.0.1/`,
+                        adminList: [/*2000000*/],
+                        aura: { defaultLv: 99, },
+                        worldMapSettings: { episode: 12 },
+                        enableHomunAutoFeed: true, // allow autofeed in older clients
+                        enableCashShop: false,
+                    },
+                ],
+                packetKeys: false, // must disable packet obfuscation
+                packetDump: false,
+                skipServerList: false,
+                skipIntro: true, // optional. skip intro where you can drop your client assets
+                clientVersionMode: "PacketVer",
+                // registrationweb: window.location.protocol + "//127.0.0.1/register", // optional. Register button link
+                forceUseAddress: false,
+                worldMapSettings: { // Settings for world map.
+                    episode: 98, // Episode content to show (0-98, eg:14.2, default:98 = latest)
+                    add: [],     // Optional, Array of maps to custom show  (eg: ["rachel", "ra_fild01"])
+                    remove: []   // Optional, Array of maps to custom remove (eg: ["alberta", "pay_fild03"])
+                },
+                plugins: { // https://github.com/MrAntares/roBrowserLegacy-plugins
+                    //BBGutterLines: "BBGutterLines/BBGutterLines", // shows gutter lines on the ground when use skill
+                    //IntroMessage: { path: "IntroMessage/IntroMessage", pars: { newsUrl: "/news.html" } }, // show news in intro
+                },
+                clientHash: null,
+                enableConsole: true,
+                disableConsole: false,
+                // enableCashShop: false, // Enable Cash Shop UI? (Requires PACKETVER 20191224 or above)
+                enableBank: false,
+                enableMapName: false,
+                enableRefineUI: false,
+                enableDmgSuffix: false,
+                enableCheckAttendance: false,
+                ThirdPersonCamera: false,
+                FirstPersonCamera: false,
+                CameraMaxZoomOut: 5,
+                loadLua: false, // when you have old client like 2013 without all lua/lub files set this to false
+            };
+            var script = document.createElement("script");
+            script.type = "text/javascript";
+            script.src = "Online.js";
+            document.getElementsByTagName("body")[0].appendChild(script);
+        });
+    </script>
+</head>
+
+<body>
+    <h1>ROBrowser</h1>
+    <div id="robrowser">Initializing roBrowser...</div>
+</body>
+
+</html>

@@ -7,9 +7,9 @@ const DEBUG = false; // optional. set to true to debug
 /**
  * Cached version number (IMPORTANT).
  * 
- * By changing this value, you can update client's caches source files to reflect any changes in UI or service worker.
+ * By changing this value, you can update client's caches source files to reflect any changes.
  * For an example, if you only update client-side sources, you need to update this version number,
- * or the client continues to use cached sources and does not get latest updates in the UI.
+ * or the client continues to use cached sources and does not get latest updates.
  */
 const CACHE_VERSION = 1;
 const CACHE_NAME = "sw-robrowser-cache-v";
@@ -23,15 +23,15 @@ const CACHE_FILES = [
 	'/',
 	'/index.html',
 	'/favicon.svg',
-	'/index.js',
+	//'/index.js', // disable cache for development
 	'/styles.css',
 	'/manifest.json',
 	'/offline.html',
 	'/service-worker.js',
 	//#endregion
 	//#region roBrowser
-	'/Online.js',
-	'/ThreadEventHandler.js',
+	//'/Online.js', // disable cache for development
+	//'/ThreadEventHandler.js', // disable cache for development
 	'/wasmoon-lua5.1@1.18.10/dist/liblua5.1.wasm', // CDN https://unpkg.com
 	'/src/UI/Components/Intro/images/about.png',
 	'/src/UI/Components/Intro/images/icon.png',
@@ -41,10 +41,6 @@ const CACHE_FILES = [
 	'/src/UI/Components/Intro/images/box.jpg',
 	'/src/UI/Components/Intro/images/play.png',
 	'/src/UI/Components/Intro/images/play-down.png',
-	// these should be cached by the browser already with Cache-control (disk cache)
-	// '/data/texture/%C3%80%C2%AF%C3%80%C3%BA%C3%80%C3%8E%C3%85%C3%8D%C3%86%C3%A4%C3%80%C3%8C%C2%BD%C2%BA/scroll0bar_mid.bmp',
-	// '/data/texture/%C3%80%C2%AF%C3%80%C3%BA%C3%80%C3%8E%C3%85%C3%8D%C3%86%C3%A4%C3%80%C3%8C%C2%BD%C2%BA/scroll0bar_up.bmp',
-	// '/data/texture/%C3%80%C2%AF%C3%80%C3%BA%C3%80%C3%8E%C3%85%C3%8D%C3%86%C3%A4%C3%80%C3%8C%C2%BD%C2%BA/scroll0bar_down.bmp',
 	//#endregion
 ];
 
@@ -69,6 +65,7 @@ _self.addEventListener('install', (/** @type {InstallEvent} */event) => {
 					return caches.delete(cacheName)
 				}
 				if (DEBUG) console.log(`${TAG} skip delete cache: ${cacheName}`)
+				return Promise.resolve(true)
 			})))
 			.then(() => caches.open(CURRENT_CACHE).then((cache) => { // add new cache
 				if (DEBUG) console.log(`${TAG} add cache: ${CURRENT_CACHE}`, CACHE_FILES)

@@ -7,14 +7,14 @@ import { getContentTypeExt } from "./getContentTypeExt.js";
  * @param {import("http").ServerResponse} response 
  * @param {string} filepath 
  * @param {Object} [options]
- * @param {number} [options.cache] Set Cache-control. default: `43200` (12 hours). use `0` for no caching
+ * @param {string} [options.cache] Set Cache-control example: `max-age=43200` (12 hours). default: `no-cache`
  * @param {(content:Buffer) => Buffer<ArrayBufferLike>} [options.onBeforeSend] callback before send file, if you need to access the file content before it's sent
  * 
  * @returns {Promise<void>}
  */
 export async function sendFile(response, filepath, options) {
     const _options = Object.assign({
-        cache: 60 * 60 * 12, // 12 hours
+        cache: "no-cache",
     }, options);
 
     // get header Content-Type
@@ -35,7 +35,7 @@ export async function sendFile(response, filepath, options) {
         'X-Powered-By': 'Magic',
     };
     if (_options.cache) {
-        headers['Cache-control'] = `public, max-age=${_options.cache}`
+        headers['Cache-control'] = _options.cache
     }
     response.writeHead(200, headers);
     response.end(content, 'utf-8');
